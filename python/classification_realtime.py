@@ -230,16 +230,18 @@ def classifyRealtime():
                 # if the standard deviation isn't "too big"
                 if std < stdThreshold:
                     winner = Counter(responses).most_common(1)[0][0]
-                    print("Gesture: " + str(winner))
                     setCurGes(str(winner))
-                    print(responses)
 
                     count = 0
                     for r in responses:
                         if r == winner:
                             count += 1
-                    print('Precision: ' +
-                          str((count/float(len(responses)))*100.0) + '%\n')
+                    
+                    if __name__ == "__main__":
+                        print("Gesture: " + getCurGes())
+                        print(responses)
+                        print('Precision: ' +
+                            str((count/float(len(responses)))*100.0) + '%\n')
                 else:
                     print "Garbage data. Discarding."
 

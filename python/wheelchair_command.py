@@ -74,17 +74,14 @@ def runROS():
 			stop()
 		elif cmd == 'forward':
 			forward()
-			# time.sleep(5)
 		elif cmd == 'backward':
 			backward()
-			# time.sleep(5)
 		elif cmd == 'left':
 			left()
-			# time.sleep(5)
 		elif cmd == 'right':
 			right()
-			# time.sleep(5)
 		else:
+			if not demo: time.sleep(5)
 			continue
 
 import threading
