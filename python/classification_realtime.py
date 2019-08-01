@@ -29,7 +29,8 @@ import open_myo as myo
 
 emgs = list()
 k = 50
-stdThreshold = 150
+thresSTD = 100
+thresPrec = 0.7
 
 PRINT_DEBUG = False
 CURRENT_GESTURE = ''
@@ -127,11 +128,8 @@ def getNeighbors(k, unknown, givens):
 
 # TODO return a weight: how many percentage are correct?
 # votes[r] divided by the sum over all r of the votes of r
-# check consistency and strength of EMG values - e.g. stdev etc.
 # possible do overlapping windows of reading EMG data
 # e.g 1 2 3, 2 3 4, 3 4 5...
-# make a threshold that allows filtering unsure data,
-# but also doesn't do nothing too often
 
 
 def getResponse(neighbors):
@@ -146,7 +144,7 @@ def getResponse(neighbors):
         if r in votes:
             votes[r] += 1/(n[1])  # add the response's distance-weighted vote
         else:
-            votes[r] = 0
+            votes[r] = 0  
 
     votes_sorted = sorted(
         votes.iteritems(), key=operator.itemgetter(1), reverse=True)
@@ -228,20 +226,25 @@ def classifyRealtime():
             if len(emgs) >= 10:
                 std = np.std(emgs)
                 # if the standard deviation isn't "too big"
-                if std < stdThreshold:
+                if std < thresSTD:
                     winner = Counter(responses).most_common(1)[0][0]
-                    setCurGes(str(winner))
 
                     count = 0
                     for r in responses:
                         if r == winner:
                             count += 1
+
+                    precision = count/float(len(responses))
+                    if precision >= thresPrec:
+                        setCurGes(str(winner))
+                    else:
+                        setCurGes("Imprecise data. Ignoring.")
                     
                     if __name__ == "__main__":
                         print("Gesture: " + getCurGes())
                         print(responses)
                         print('Precision: ' +
-                            str((count/float(len(responses)))*100.0) + '%\n')
+                            str(precision*100.0) + '%\n')
                 else:
                     print "Garbage data. Discarding."
 
