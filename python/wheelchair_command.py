@@ -89,9 +89,13 @@ def stop():
 	pub.publish(twist)
 
 
-# def decelerate():
-# 	twist = Twist()
-	# TODO
+def decelerate():
+	twist = Twist()
+	for i in range(3):
+		twist.linear.x = 2-i
+		pub.publish(twist)
+		time.sleep(1)
+	
 
 # ------------------------------------------------------------------
 # functional processing loop
@@ -127,7 +131,7 @@ def runROS():
 			elif cmd == 'backward-right':
 				backward_right
 			elif cmd == 'Imprecise data. Ignoring.':
-				stop()
+				decelerate()
 			else:
 				print "Unimplemented command:", cmd
 				if not demo: time.sleep(5)
