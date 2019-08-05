@@ -29,7 +29,7 @@ import open_myo as myo
 
 emgs = list()
 k = 50
-thresSTD = 100
+thresSTD = 150
 thresPrec = 0.7
 
 PRINT_DEBUG = False
@@ -43,6 +43,7 @@ def getCurGes():
 def setCurGes(gesture):
     global CURRENT_GESTURE
     CURRENT_GESTURE = gesture
+    
 
 # ------------------------------------------------------------------
 # myo functions

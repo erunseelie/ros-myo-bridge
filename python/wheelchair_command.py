@@ -2,8 +2,8 @@
 import time
 
 import classification_realtime as cr
-import rospy
-from geometry_msgs.msg import Twist
+import rospy # pylint: disable=import-error
+from geometry_msgs.msg import Twist # pylint: disable=import-error
 
 # ------------------------------------------------------------------
 # conditional operational values
@@ -56,9 +56,42 @@ def left():
 	pub.publish(twist)
 
 
+def forward_left():
+	twist = Twist()
+	twist.linear.x = normal_linear
+	twist.angular.z = normal_angular
+	pub.publish(twist)
+
+
+def forward_right():
+	twist = Twist()
+	twist.linear.x = normal_linear
+	twist.angular.z = -normal_angular
+	pub.publish(twist)
+
+
+def backward_left():
+	twist = Twist()
+	twist.linear.x = -normal_linear/2
+	twist.angular.z = normal_angular
+	pub.publish(twist)
+
+
+def backward_right():
+	twist = Twist()
+	twist.linear.x = -normal_linear/2
+	twist.angular.z = -normal_angular
+	pub.publish(twist)
+
+
 def stop():
 	twist = Twist()
 	pub.publish(twist)
+
+
+# def decelerate():
+# 	twist = Twist()
+	# TODO
 
 # ------------------------------------------------------------------
 # functional processing loop
@@ -66,23 +99,39 @@ def stop():
 
 
 def runROS():
+	lastCommand = ''
+
 	while True:
 		cmd = cr.getCurGes()
-		if cmd != '': print(cmd)
+		if cmd != lastCommand:
+			lastCommand = cmd
+			print cmd
+			# if cmd != '': print(cmd)
 
-		if cmd == 'stop':
-			stop()
-		elif cmd == 'forward':
-			forward()
-		elif cmd == 'backward':
-			backward()
-		elif cmd == 'left':
-			left()
-		elif cmd == 'right':
-			right()
-		else:
-			if not demo: time.sleep(5)
-			continue
+			if cmd == 'stop':
+				stop()
+			elif cmd == 'forward':
+				forward()
+			elif cmd == 'backward':
+				backward()
+			elif cmd == 'left':
+				left()
+			elif cmd == 'right':
+				right()
+			elif cmd == 'forward-left':
+				forward_left()
+			elif cmd == 'forward-right':
+				forward_right()
+			elif cmd == 'backward-left':
+				backward_left()
+			elif cmd == 'backward-right':
+				backward_right
+			elif cmd == 'Imprecise data. Ignoring.':
+				stop()
+			else:
+				print "Unimplemented command:", cmd
+				if not demo: time.sleep(5)
+				continue
 
 import threading
 print "Starting ROS..."
