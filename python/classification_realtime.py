@@ -132,6 +132,15 @@ def getNeighbors(k, unknown, givens):
 # possible do overlapping windows of reading EMG data
 # e.g 1 2 3, 2 3 4, 3 4 5...
 
+def squash(votes):
+    total = 0
+    for v, t in votes.iteritems():
+        total += t
+    size = votes.size()
+    for v, t in votes.iteritems():
+        v = v / (total/size)
+    return votes
+
 
 def getResponse(neighbors):
     '''
@@ -149,6 +158,7 @@ def getResponse(neighbors):
 
     votes_sorted = sorted(
         votes.iteritems(), key=operator.itemgetter(1), reverse=True)
+    votes_sorted = squash(votes_sorted)
     if (PRINT_DEBUG):
         print "Voting concluded. Results:", votes_sorted
     winner = list(votes_sorted[0])
