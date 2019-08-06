@@ -132,6 +132,7 @@ def getNeighbors(k, unknown, givens):
 # possible do overlapping windows of reading EMG data
 # e.g 1 2 3, 2 3 4, 3 4 5...
 
+
 def squash(votes):
     total = 0
     for v, t in votes.iteritems():
@@ -154,7 +155,7 @@ def getResponse(neighbors):
         if r in votes:
             votes[r] += 1/(n[1])  # add the response's distance-weighted vote
         else:
-            votes[r] = 0  
+            votes[r] = 0
 
     votes_sorted = sorted(
         votes.iteritems(), key=operator.itemgetter(1), reverse=True)
@@ -250,12 +251,12 @@ def classifyRealtime():
                         setCurGes(str(winner))
                     else:
                         setCurGes("Imprecise data. Ignoring.")
-                    
+
                     if __name__ == "__main__":
                         print("Gesture: " + getCurGes())
                         print(responses)
                         print('Precision: ' +
-                            str(precision*100.0) + '%\n')
+                              str(precision*100.0) + '%\n')
                 else:
                     print "Garbage data. Discarding."
 
