@@ -114,7 +114,7 @@ def runROS():
             # if cmd != '': print(cmd)
 
             if cmd == 'stop':
-                stop()
+                decelerate()
             elif cmd == 'forward':
                 forward()
             elif cmd == 'backward':
@@ -123,14 +123,16 @@ def runROS():
                 left()
             elif cmd == 'right':
                 right()
-            elif cmd == 'forward-left':
-                forward_left()
-            elif cmd == 'forward-right':
-                forward_right()
-            elif cmd == 'backward-left':
-                backward_left()
-            elif cmd == 'backward-right':
-                backward_right
+            # elif cmd == 'relaxed':
+            #     decelerate()
+            # elif cmd == 'forward-left':
+            #     forward_left()
+            # elif cmd == 'forward-right':
+            #     forward_right()
+            # elif cmd == 'backward-left':
+            #     backward_left()
+            # elif cmd == 'backward-right':
+            #     backward_right
             elif cmd == 'Imprecise data. Ignoring.':
                 decelerate()
             else:

@@ -29,7 +29,7 @@ import open_myo as myo
 
 emgs = list()
 k = 50
-thresSTD = 150
+thresSTD = 200
 thresPrec = 0.5
 
 PRINT_DEBUG = False
@@ -128,18 +128,22 @@ def getNeighbors(k, unknown, givens):
     return neighbors[:k]
 
 # TODO return a weight: how many percentage are correct?
-# votes[r] divided by the sum over all r of the votes of r
+# 
 # possible do overlapping windows of reading EMG data
 # e.g 1 2 3, 2 3 4, 3 4 5...
 
 
 def squash(votes):
+    '''
+    Reduce the strength for which each vote counts.
+    "votes[r] divided by the sum over all r of the votes of r" (゜-゜)
+    '''
     total = 0
     for v, t in votes.iteritems():
         total += t
-    size = votes.size()
+    size = len(votes)
     for v, t in votes.iteritems():
-        v = v / (total/size)
+        t = t / (total/size)
     return votes
 
 
@@ -157,12 +161,12 @@ def getResponse(neighbors):
         else:
             votes[r] = 0
 
-    votes_sorted = sorted(
+    votes = squash(votes)
+    winner = sorted(
         votes.iteritems(), key=operator.itemgetter(1), reverse=True)
-    votes_sorted = squash(votes_sorted)
     if (PRINT_DEBUG):
-        print "Voting concluded. Results:", votes_sorted
-    winner = list(votes_sorted[0])
+        print "Voting concluded. Results:", winner
+    winner = list(winner[0])
     end = time.time()
 
     if (PRINT_DEBUG):
