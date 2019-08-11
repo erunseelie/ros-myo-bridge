@@ -123,8 +123,8 @@ def runROS():
                 left()
             elif cmd == 'right':
                 right()
-            # elif cmd == 'relaxed':
-            #     decelerate()
+            elif cmd == 'relaxed':
+                stop()
             # elif cmd == 'forward-left':
             #     forward_left()
             # elif cmd == 'forward-right':
@@ -134,7 +134,7 @@ def runROS():
             # elif cmd == 'backward-right':
             #     backward_right
             elif cmd == 'Imprecise data. Ignoring.':
-                decelerate()
+                stop()
             else:
                 print "Unimplemented command:", cmd
                 if not demo:
